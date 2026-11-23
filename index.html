@@ -4,6 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>IEEE Essential Patent Claims Flowchart</title>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/svg2pdf.js@2.8.1/dist/svg2pdf.umd.min.js"></script>
   <style>
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -11,97 +13,70 @@
       margin: 0;
       padding: 24px;
       display: flex;
-      justify-content: center;
+      flex-direction: column;
+      align-items: center;
+    }
+    .toolbar {
+      margin-bottom: 16px;
+    }
+    button {
+      background-color: #1155cc;
+      color: #ffffff;
+      border: none;
+      padding: 10px 18px;
+      font-size: 14px;
+      font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0d42a1;
     }
     .mermaid {
       max-width: 100%;
     }
+    @media print {
+      .toolbar { display: none; }
+    }
   </style>
 </head>
 <body>
+  <div class="toolbar">
+    <button id="download-pdf">Download Vector PDF</button>
+  </div>
+
   <pre class="mermaid">
-flowchart TD
-    classDef trigger fill:#fce4e4,stroke:#cc0000,stroke-width:2px,color:#000
-    classDef agreeable fill:#d9ead3,stroke:#38761d,stroke-width:2px,color:#000
-    classDef disagreeable fill:#fff2cc,stroke:#b45f06,stroke-width:2px,color:#000
-    classDef decision fill:#c9daf8,stroke:#1155cc,stroke-width:2px,color:#000
-    classDef action fill:#f3f3f3,stroke:#666666,stroke-width:2px,color:#000
-    classDef endstate fill:#e0e0e0,stroke:#666666,stroke-width:2px,color:#000
-    classDef database fill:#d9d2e9,stroke:#674ea7,stroke-width:2px,color:#000
-    classDef notes fill:#ffffff,stroke:#ced4da,stroke-width:1px,color:#000
-
-    %% Legend & General Notes Box
-    subgraph LEGEND ["Legend & General Notes"]
-        direction TB
-        L_GREEN["Participant Generally Agreeable"]:::agreeable
-        L_YELLOW["Participant Generally Disagreeable"]:::disagreeable
-        L_TEXT["DEFINITIONS\n• Participant: Any person including a legal entity\n• RAND: Reasonable And Non-Discriminatory terms and\n  conditions including without compensation\n• LoA: Letter of Assurance\n• EP: Essential Patent Claims (LoAs not needed for non-essential claims)\n• WG Chair: The Working Group Chair or his delegate\n\nCALL FOR ESSENTIAL PATENT CLAIMS RULES\n• Call shall be made at every meeting\n• Call shall go out to all participants\n• Call shall only be for essential patent claims"]:::notes
-    end
-    style LEGEND fill:#f8f9fa,stroke:#adb5bd,stroke-width:1.5px,color:#000
-
-    %% 1. Triggers & Inputs
-    START(("START")):::trigger
-    T1["WG Chair issues call for essential patent claims"]:::action
-    T2(["Notice, claim, or response at any time from any source"]):::trigger
-    T3(["Working Group incorporates part of another standard\n(including non-IEEE)"]):::trigger
-    T4(["Working Group incorporates another standard in whole\nand unmodified (including non-IEEE)"]):::trigger
-    T5(["Submitter makes special PatCom request"]):::trigger
-
-    %% 2. Initial Processing
-    START --> T1
-    T1 -->|"Participant responds"| P1["Participant responds to the call for essential patent claims"]:::action
-    P1 --> O1["WG Chair sends LoA, cover letter & makes draft standard available"]:::action
-    T2 --> O1
-
-    T3 --> D1{"LoA on file for the incorporated part?"}:::decision
-    T4 --> END1(["No Further Action Needed"]):::endstate
-
-    D1 -- "Yes" --> END1
-    D1 -- "No" --> D3
-
-    %% 3. Outreach Decisions
-    O1 --> D2{"Potential EP holder responds to LoA request?"}:::decision
-    D2 -- "No" --> D3{"Any reason to assume potential EP?"}:::decision
-    D3 -- "No" --> END1
-    D3 -- "Yes" --> PATCOM["PatCom Consideration"]:::action
-
-    %% 4. Response Evaluation (Routing)
-    D2 -- "Yes" --> RESP_ROUTER{"Evaluate Response Type"}:::decision
-
-    %% Agreeable Flow (Green)
-    RESP_ROUTER -->|"Generally Agreeable"| G1["Has/claims EPs & agrees to RAND"]:::agreeable
-    RESP_ROUTER -->|"Generally Agreeable"| G2["Does not know but agrees to RAND if discovered later"]:::agreeable
-    RESP_ROUTER -->|"Generally Agreeable"| G3["Agrees not to enforce essential patent claim(s)"]:::agreeable
-
-    %% Disagreeable Flow (Yellow)
-    RESP_ROUTER -->|"Generally Disagreeable"| Y1["Has specific EPs & does not agree to RAND"]:::disagreeable
-    RESP_ROUTER -->|"Generally Disagreeable"| Y2["Does not know & does not agree to RAND if discovered later"]:::disagreeable
-    RESP_ROUTER -->|"Generally Disagreeable"| Y3["Asserts EPs with no specifics & refuses RAND"]:::disagreeable
-
-    %% Special Track
-    T5 -.->|"Possibly w/o WG knowledge"| PATCOM
-
-    %% 5A. Agreeable Processing & Database
-    G1 & G2 & G3 --> V1["Authorized person returns LoA to IEEE staff with copy to WG Chair"]:::action
-    
-    V1 --> D4{"Materially complete and on approved LOA form?"}:::decision
-    D4 -- "No" --> R1["Potential EP holder is reminded of requirement to use approved form"]:::action
-    R1 --> V1
-    
-    D4 -- "Yes" --> DB[("Patent LoA Database")]:::database
-
-    %% Database Access Outputs
-    DB -->|"Written request to staff"| OUT1["Copy of LoA sent to requestor"]:::action
-    DB -->|"Web Access"| OUT2["List of EP holders, LoA category, and patent number if appropriate.\nLoA is scanned into DB and accessible from the Web."]:::action
-
-    %% 5B. Disagreeable Processing
-    Y1 & Y2 & Y3 --> PATCOM
-    PATCOM --> OUT3(["PatCom recommendation to the SASB for appropriate action"]):::endstate
+    <!-- PASTE YOUR flowchart TD CODE HERE -->
   </pre>
 
   <script type="module">
     import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
-    mermaid.initialize({ startOnLoad: true });
+    mermaid.initialize({
+      startOnLoad: true,
+      flowchart: { htmlLabels: false }
+    });
+
+    document.getElementById('download-pdf').addEventListener('click', async () => {
+      const svg = document.querySelector('.mermaid svg');
+      if (!svg) return;
+
+      const vb = svg.viewBox.baseVal;
+      const rawW = (vb && vb.width) ? vb.width : svg.getBoundingClientRect().width;
+      const rawH = (vb && vb.height) ? vb.height : svg.getBoundingClientRect().height;
+      const pad = 20;
+      const width = Math.ceil(rawW + pad * 2);
+      const height = Math.ceil(rawH + pad * 2);
+
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({
+        orientation: width > height ? 'l' : 'p',
+        unit: 'pt',
+        format: [width, height]
+      });
+
+      await doc.svg(svg, { x: pad, y: pad, width: rawW, height: rawH });
+      doc.save('ieee-patent-flowchart.pdf');
+    });
   </script>
 </body>
 </html>
