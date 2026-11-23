@@ -5,8 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>IEEE Essential Patent Claims Flowchart</title>
   <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/svg2pdf.js@2.8.1/dist/svg2pdf.umd.min.js"></script>
   <style>
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -36,14 +34,34 @@
     .mermaid {
       max-width: 100%;
     }
+    
+    /* Native PDF Export Styling */
     @media print {
-      .toolbar { display: none; }
+      @page {
+        size: landscape;
+        margin: 0; /* Removes default browser headers/footers */
+      }
+      body {
+        padding: 0;
+        margin: 0;
+        display: block;
+      }
+      .toolbar {
+        display: none; /* Hides the button from the final PDF */
+      }
+      .mermaid {
+        width: 100%;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
     }
   </style>
 </head>
 <body>
   <div class="toolbar">
-    <button id="download-pdf">Download Vector PDF</button>
+    <button id="download-pdf">Generate Vector PDF</button>
   </div>
 
   <pre class="mermaid">
@@ -131,32 +149,11 @@ flowchart TD
   </pre>
 
   <script>
-    mermaid.initialize({
-      startOnLoad: false,
-      flowchart: { htmlLabels: false }
-    });
+    mermaid.initialize({ startOnLoad: false });
     mermaid.run({ querySelector: '.mermaid' });
 
-    document.getElementById('download-pdf').addEventListener('click', async () => {
-      const svg = document.querySelector('.mermaid svg');
-      if (!svg) return;
-
-      const vb = svg.viewBox.baseVal;
-      const rawW = (vb && vb.width) ? vb.width : svg.getBoundingClientRect().width;
-      const rawH = (vb && vb.height) ? vb.height : svg.getBoundingClientRect().height;
-      const pad = 20;
-      const width = Math.ceil(rawW + pad * 2);
-      const height = Math.ceil(rawH + pad * 2);
-
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF({
-        orientation: width > height ? 'l' : 'p',
-        unit: 'pt',
-        format: [width, height]
-      });
-
-      await doc.svg(svg, { x: pad, y: pad, width: rawW, height: rawH });
-      doc.save('ieee-patent-flowchart.pdf');
+    document.getElementById('download-pdf').addEventListener('click', () => {
+      window.print();
     });
   </script>
 </body>
